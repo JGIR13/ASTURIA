@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASTUR‑IA — Dashboard</title>
+  <meta name="color-scheme" content="dark" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+        :root {
+      --bg-main: #065089;
+      --bg-card: #0a5c97;
+      --bg-card-soft: #0d609f;
+
+      --text-main: #ffffff;
+      --text-soft: #c9d9ef;
+
+      --accent-error: #ff6b6b;
+      --accent-ok: #4dd0ff;
+
+      --proc-panel-bg: rgba(0, 34, 72, 0.96);
+      --proc-panel-soft: rgba(2, 60, 112, 0.96);
+      --proc-accent: #35c4ff;
+      --proc-accent-soft: #76b7ff;
+      --proc-text-soft: #d6e6ff;
+
+      --glow-cyan: #35c4ff;
+      --glow-blue: #1fa0ff;
+      --glow-pink: #ff6bba;
+
+      --shadow-strong: 0 22px 48px rgba(0, 0, 0, 0.55);
+      --shadow-soft: 0 14px 30px rgba(0, 0, 0, 0.38);
+
+      /* Fondo neuronas (control) */
+      --neuron-opacity: 0.33;
+      --aurora-opacity: 0.20;
+
+      --neuron-center-size: clamp(520px, 56vmin, 740px);
+      --neuron-corner-size: clamp(1600px, 180vmin, 3000px);
+
+      /* offsets neuronas */
+      --neuron-tr-x: -36vw;
+      --neuron-tr-y: -30vh;
+      --neuron-bl-x: -40vw;
+      --neuron-bl-y: -28vh;
+
+      /* Partículas */
+      --particles-opacity: 0.30;
+
+      /* Superficies y tipografía (alineado a Listado) */
+      --surface-1: rgba(10, 24, 41, 0.78);
+      --surface-2: rgba(7, 20, 35, 0.76);
+      --surface-glow: rgba(53, 196, 255, 0.08);
+      --surface-glow-alt: rgba(255, 107, 186, 0.06);
+      --surface-stroke: rgba(255,255,255,0.08);
+      --surface-stroke-strong: rgba(255,255,255,0.12);
+      --radius-lg: 22px;
+
+      --font-base: 15px;
+      --font-sm: 13px;
+      --font-lg: 17px;
+      --font-h1: clamp(26px, 3.2vw, 40px);
+      --font-h2: clamp(18px, 2.2vw, 24px);
+    }
+
+    /* =========================================================
+      Reset y tipografía
+      ========================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Lexend", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    html, body { height: 100%; overflow: hidden; }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    body {
+      font-size: var(--font-base);
+      line-height: 1.45;
+      letter-spacing: 0.2px;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background:
+        radial-gradient(60% 45% at 50% 28%, rgba(20,120,170,0.06), rgba(0,0,0,0) 60%),
+        linear-gradient(170deg, #050b12 0%, #051426 38%, #041b2f 70%, #031421 100%);
+      background-attachment: fixed;
+    }
+
+    /* =========================================================
+      Fondo (escena)
+      ========================================================= */
+    .bg-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-scene {
+      position: absolute;
+      inset: 0;
+      transform-origin: top left; /* controlado por JS */
+      opacity: var(--neuron-opacity);
+      background:
+        url('../img/neurona_asturia.png') center 52% / var(--neuron-center-size) auto no-repeat,
+        url('../img/neurona_asturia.png') right var(--neuron-tr-x) top var(--neuron-tr-y) / var(--neuron-corner-size) auto no-repeat,
+        url('../img/neurona_asturia.png') left var(--neuron-bl-x) bottom var(--neuron-bl-y) / var(--neuron-corner-size) auto no-repeat,
+        url('../img/neurona_asturia.png') right 0 bottom 0 / var(--neuron-corner-size) auto no-repeat,
+        radial-gradient(42% 42% at 50% 52%, rgba(53,196,255,.10), rgba(0,0,0,0) 70%);
+    }
+    .bg-scene::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(40% 25% at 15% 20%, rgba(31,160,255,.35), rgba(31,160,255,0) 70%),
+        radial-gradient(35% 22% at 85% 30%, rgba(255,107,186,.25), rgba(255,107,186,0) 70%),
+        radial-gradient(45% 30% at 50% 80%, rgba(77,208,255,.28), rgba(77,208,255,0) 70%);
+      filter: blur(36px) saturate(120%);
+      opacity: var(--aurora-opacity);
+    }
+    .bg-scene::after {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(circle, rgba(220,238,255,.85) 0 1.6px, transparent 2.4px) 0 0/100px 100px,
+        radial-gradient(circle, rgba(170,210,255,.70) 0 1.6px, transparent 2.4px) 0 0/130px 130px,
+        radial-gradient(circle, rgba(255,255,255,.60) 0 1.8px, transparent 2.6px) 0 0/160px 160px,
+        radial-gradient(circle, rgba(180,210,255,.50) 0 2px,   transparent 3px)   0 0/210px 210px,
+        linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 8%, rgba(255,255,255,0) 92%, rgba(255,255,255,0.04) 100%);
+      filter: blur(.1px) saturate(125%);
+      opacity: var(--particles-opacity);
+      mix-blend-mode: screen;
+      will-change: background-position;
+      animation: bgDotsDrift 70s linear infinite;
+    }
+
+    /* =========================================================
+      Layout principal
+      ========================================================= */
+    .wrap {
+      padding: 20px 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      isolation: isolate;
+    }
+
+    /* =========================================================
+      Header
+      ========================================================= */
+    .hdr { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; color: inherit; }
+
+    #logoHead,
+    .brand-logo {
+      width:44px;
+      height:44px;
+      object-fit:cover;
+      background: none;
+    }
+
+    .brand .t1 { font-size: 130%; font-weight: 700; line-height: 1.1; letter-spacing: .3px; }
+    .brand .t2 { font-size: 85%; color: var(--text-soft); }
+
+    .hdr-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .btn {
+      display: inline-block;
+      padding: 10px 24px;
+      font-size: 14px;
+      color: #fff;
+      background: rgba(6, 80, 137, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform .12s ease, box-shadow .15s ease, filter .15s ease, background-position .3s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.28);
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 26px rgba(0,0,0,.38); filter: drop-shadow(0 0 12px rgba(31,160,255,.35)); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary {
+      border: none;
+      background: linear-gradient(135deg, #33c3ff, #1fa0ff, #35c4ff);
+      background-size: 200% 200%;
+      animation: btn-flow 8s ease infinite;
+    }
+
+    /* =========================================================
+      Título principal
+      ========================================================= */
+    .page-title {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 6px 0 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .title-main {
+      font-size: var(--font-h1);
+      font-weight: 800;
+      letter-spacing: .3px;
+      color: #fff;
+      text-shadow: 0 10px 24px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px) saturate(120%);
+      animation: float-soft 9s ease-in-out infinite;
+    }
+
+    /* =========================================================
+      Grid de paneles
+      ========================================================= */
+    .main-grid {
+      flex: 1;
+      max-width: 1280px;
+      margin: 8px auto 0;
+      display: grid;
+      grid-template-columns: 0.9fr 1.35fr 0.9fr;
+      grid-template-rows: 420px 210px;
+      grid-template-areas:
+        "left center right"
+        "bottom-left bottom-center bottom-right";
+      column-gap: 30px;
+      row-gap: 26px;
+      align-items: center;
+      position: relative;
+      isolation: isolate;
+    }
+    .main-grid > * { position: relative; z-index: 1; }
+    .center-neuron { display: none !important; }
+
+    /* =========================================================
+      Cards y paneles
+      ========================================================= */
+    .card {
+      border-radius: var(--radius-lg);
+      padding: 22px 26px;
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      box-shadow: var(--shadow-strong);
+      backdrop-filter: saturate(120%) blur(4px);
+      transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      overflow: hidden;
+      animation: float-soft 9s ease-in-out infinite;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 28px 58px rgba(0,0,0,.6); border-color: var(--surface-stroke-strong); }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: -20% -40%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.08) 50%, rgba(255,255,255,0) 65%);
+      transform: translateX(-60%);
+      animation: shine-sweep 12s linear infinite;
+      pointer-events: none;
+    }
+    .card::before,
+    .stats-summary::before {
+      content: "";
+      position: absolute;
+      inset: -8%;
+      background:
+        radial-gradient(circle, rgba(220,238,255,.45) 0 1.4px, transparent 2.2px) 0 0/90px 90px,
+        radial-gradient(circle, rgba(170,210,255,.35) 0 1.4px, transparent 2.2px) 0 0/120px 120px,
+        radial-gradient(circle, rgba(255,255,255,.30) 0 1.6px, transparent 2.6px) 0 0/150px 150px;
+      mix-blend-mode: screen;
+      opacity: .14;
+      pointer-events: none;
+      animation: bgDotsDrift 80s linear infinite;
+      z-index: 0;
+    }
+    .card > *, .stats-summary > * { position: relative; z-index: 1; }
+
+    .panel-left { grid-area: left; align-self: center; }
+    .panel-right { grid-area: right; align-self: center; }
+
+    .panel-title {
+      font-size: var(--font-h2);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: .2px;
+    }
+    .panel-subtitle-inline { color: rgba(255, 255, 255, 0.60); font-style: italic; font-size: 0.92em; }
+
+    .big-number-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+    .big-number { font-size: 44px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
+    .big-number-ghost { font-size: 22px; font-weight: 600; opacity: 0.85; }
+
+    .metric-list { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
+    .metric-row { display: flex; justify-content: space-between; align-items: center; }
+    .metric-label { color: var(--text-soft); font-weight: 700; }
+    .metric-value { font-weight: 600; }
+
+    /* =========================================================
+      Donuts
+      ========================================================= */
+    .bottom-left, .bottom-right { display: flex; align-items: center; gap: 16px; }
+    .bottom-left { grid-area: bottom-left; padding-left: 8px; }
+    .bottom-right { grid-area: bottom-right; justify-content: flex-end; padding-right: 8px; }
+
+    .donut-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 14px; }
+
+    .donut {
+      width: 140px; height: 140px; border-radius: 50%; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 24px; color: #ffffff;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
+      transition: transform .18s ease, box-shadow .2s ease, filter .2s ease;
+      isolation: isolate;
+    }
+    .donut::before {
+      content: "";
+      position: absolute; width: 92px; height: 92px; border-radius: 50%;
+      background: radial-gradient(circle, #072747, #02101f);
+      z-index: 1;
+    }
+    .donut::after {
+      content: "";
+      position: absolute; inset: -10px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(53,196,255,.22), rgba(53,196,255,0) 60%);
+      filter: blur(6px);
+      z-index: 0;
+      animation: pulse 5.5s ease-in-out infinite;
+    }
+    .donut span { position: relative; z-index: 2; }
+    .donut:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 20px 44px rgba(0,0,0,.5); filter: drop-shadow(0 0 10px rgba(53,196,255,.3)); }
+    .donut-label { text-align: center; }
+    .donut-subtitle { font-size: 13px; color: var(--text-soft); }
+    .donut-error { background: conic-gradient(#ff6b6b 0 53%, #063159 53% 100%); }
+    .donut-ok   { background: conic-gradient(#4dd0ff 0 11%, #063159 11% 100%); }
+
+    /* =========================================================
+      Resumen inferior
+      ========================================================= */
+    .bottom-center { grid-area: bottom-center; display: flex; align-items: center; justify-content: center; }
+    .stats-summary {
+      border-radius: 18px;
+      padding: 20px 28px;
+      min-width: 360px; max-width: 520px; width: 100%;
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: saturate(120%) blur(4px);
+      display: flex; flex-direction: column; gap: 6px;
+      transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+      overflow: hidden;
+      animation: float-soft 10s ease-in-out -2s infinite;
+    }
+    .stats-summary:hover { transform: translateY(-1px); box-shadow: 0 20px 44px rgba(0,0,0,.5); border-color: var(--surface-stroke-strong); }
+    .stats-summary::after {
+      content: "";
+      position: absolute; inset: -30% -40%;
+      background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.06) 50%, rgba(255,255,255,0) 60%);
+      transform: translateX(-70%);
+      animation: shine-sweep 14s linear infinite;
+      pointer-events: none;
+    }
+    .stats-row { display: flex; justify-content: space-between; font-size: 15px; }
+    .stats-label { color: var(--text-soft); font-weight: 700; }
+    .stats-value { font-weight: 600; }
+
+    /* =========================================================
+      Responsive
+      ========================================================= */
+    @media (max-width: 1200px) { .main-grid { max-width: 100%; } }
+    @media (max-width: 1100px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto auto;
+        grid-template-areas:
+          "left"
+          "right"
+          "center"
+          "bottom-center"
+          "bottom-left"
+          "bottom-right";
+      }
+      .bottom-right { justify-content: flex-start; }
+      .stats-summary { max-width: none; }
+    }
+    @media (max-width: 768px) {
+      .wrap { padding-inline: 16px; }
+      .brand .t1 { font-size: 24px; }
+      .card { padding: 18px 16px; }
+      .donut { width: 120px; height: 120px; }
+      .title-main { font-size: 22px; padding: 12px 16px; border-radius: 14px; }
+    }
+
+    /* Ajustes pantallas grandes (neurona) */
+    @media (min-width: 1600px) {
+      :root {
+        --neuron-center-size: clamp(560px, 52vmin, 820px);
+        --neuron-corner-size: clamp(2000px, 200vmin, 3200px);
+        --neuron-tr-x: -46vw; --neuron-tr-y: -34vh;
+        --neuron-bl-x: -50vw; --neuron-bl-y: -30vh;
+      }
+    }
+    @media (min-width: 2200px) {
+      :root {
+        --neuron-center-size: clamp(620px, 48vmin, 900px);
+        --neuron-corner-size: clamp(2400px, 230vmin, 3800px);
+        --neuron-tr-x: -52vw; --neuron-tr-y: -40vh;
+        --neuron-bl-x: -56vw; --neuron-bl-y: -36vh;
+      }
+    }
+
+    /* =========================================================
+      Animaciones
+      ========================================================= */
+    @keyframes bgDotsDrift {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+      50% { background-position: 120px 80px, -100px 60px, 80px -60px, -60px 40px, 0 8px; }
+      100% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+    }
+    @keyframes btn-flow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shine-sweep {
+      0% { transform: translateX(-70%) rotate(0.001deg); }
+      100% { transform: translateX(70%) rotate(0.001deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: .35; transform: scale(1); }
+      50% { opacity: .6; transform: scale(1.03); }
+    }
+    @keyframes float-soft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-1.5px); }
+    }
+
+    /* Respeto a preferencias de usuario */
+    @media (prefers-reduced-motion: reduce) {
+      .donut, .card, .btn, .stats-summary { transition: none !important; animation: none !important; }
+      .bg-scene::after, .card::before, .stats-summary::before { animation: none !important; }
+    }
+
+    /* =========================================================
+      Overlay de permisos (FSA)
+      ========================================================= */
+    .perm-overlay {
+      position: fixed; inset: 0; display: grid; place-items: center;
+      background: rgba(10, 14, 25, .85); backdrop-filter: blur(2px); z-index: 9999;
+    }
+    .perm-card {
+      background: #0d1b2a; color: #e6f0ff; border-radius: 12px; padding: 20px;
+      width: 100%; max-width: 560px; box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .perm-card h2 { margin: 0 0 8px; }
+    .perm-card p { opacity: .9; margin: 0 0 16px; }
+    .perm-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
+
+    /* Botones locales del overlay */
+    .perm-overlay .btn {
+      background: transparent;
+      color: #a8c1ff;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: none;
+    }
+    .perm-overlay .btn:hover { background: rgba(255,255,255,.06); filter: none; transform: none; }
+    .perm-overlay .btn-primary { background: #1f6feb; color: #fff; border: 0; }
+    .perm-overlay .btn-primary:hover { background: #1a5fd0; }
+
+    /* Ocultación accesible */
+    .perm-overlay[hidden], [hidden] { display: none !important; }
+
+    /* =========================================================
+      Typed OM props (para animación de partículas si se usan)
+      ========================================================= */
+    @property --p1 { syntax: '<position>'; inherits: false; initial-value: 0px 0px; }
+    @property --p2 { syntax: '<position>'; inherits: false; initial-value: 0px 0px; }
+    @property --p3 { syntax: '<position>'; inherits: false; initial-value: 0px 0px; }
+    @property --scan { syntax: '<position>'; inherits: false; initial-value: 0px 0px; }
+
+    @keyframes moveP1 { 0% { --p1: 0px 0px; } 50% { --p1: 120px 80px; } 100% { --p1: 0px 0px; } }
+    @keyframes moveP2 { 0% { --p2: 0px 0px; } 50% { --p2: -140px 100px; } 100% { --p2: 0px 0px; } }
+    @keyframes moveP3 { 0% { --p3: 0px 0px; } 50% { --p3: 180px -120px; } 100% { --p3: 0px 0px; } }
+    @keyframes moveScan { 0% { --scan: 0px 0px; } 50% { --scan: 0px 12px; } 100% { --scan: 0px 0px; } }
+  </style>
+</head>
+<body>
+  <!-- Capa de fondos desacoplada del layout -->
+  <div class="bg-stage" aria-hidden="true">
+    <div class="bg-scene" aria-hidden="true"></div>
+  </div>
+
+  <!-- Overlay de permiso (FSA / file://) -->
+  <div id="perm-overlay" class="perm-overlay" hidden>
+    <div class="perm-card">
+      <h2>Conceder acceso a la carpeta JSON</h2>
+      <p>
+        Para calcular las métricas, selecciona la carpeta con los archivos JSON.
+        El permiso es de solo lectura y podrás revocarlo cerrando la página.
+      </p>
+      <div class="perm-actions">
+        <button id="perm-cancel" class="btn" type="button">Entrar sin cargar</button>
+        <button id="perm-accept" class="btn btn-primary" type="button">Seleccionar carpeta JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hdr">
+      <a class="brand" href="Dashboard.html" title="Inicio">
+        <img src="../img/logolimpio2.png" alt="Astur.IA" id="logoHead" class="brand-logo" />
+        <div>
+          <div class="t1">Astur.IA</div>
+          <div class="t2" id="brand-subtitle">IA · Revolving · Clasificación automática</div>
+        </div>
+      </a>
+      <div class="hdr-actions">
+        <a class="btn btn-primary" href="Listado.html" title="Ir al listado de casos">Ir a Procedimientos</a>
+        <button id="btn-folder" class="btn" type="button" hidden>Cargar carpeta JSON</button>
+        <!-- <a class="btn" href="Login.html" title="Log Out">Cerrar Sesión</a> -->
+        <input id="dirPicker" type="file" accept=".json" webkitdirectory multiple hidden />
+      </div>
+    </div>
+
+    <div class="page-title">
+      <h1 id="page-title" class="title-main">Resumen de Procedimientos</h1>
+    </div>
+
+    <section class="main-grid">
+      <article class="card panel-left">
+        <div>
+          <div class="panel-title">Identificados como revolving</div>
+          <div class="big-number-row">
+            <div class="big-number" id="m-rev-total">0</div>
+            <div class="big-number-ghost" id="m-rev-total-ghost">0</div>
+          </div>
+          <ul class="metric-list">
+            <li class="metric-row"><span class="metric-label">creado</span><span class="metric-value" id="m-rev-creado">0</span></li>
+            <li class="metric-row"><span class="metric-label">ok</span><span class="metric-value" id="m-rev-ok">0</span></li>
+            <li class="metric-row"><span class="metric-label">error en borrador</span><span class="metric-value" id="m-rev-error">0</span></li>
+            <li class="metric-row"><span class="metric-label">falso positivo</span><span class="metric-value" id="m-rev-fp">0</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="center-neuron" role="img" aria-label="Visualización IA · neurona"></div>
+
+      <article class="card panel-right">
+        <div>
+          <div class="panel-title">
+            Descartado
+            <span class="panel-subtitle-inline">(No revolving)</span>
+          </div>
+          <div class="big-number-row">
+            <div class="big-number" id="m-norev-total">0</div>
+          </div>
+          <ul class="metric-list">
+            <li class="metric-row"><span class="metric-label">creado</span><span class="metric-value" id="m-norev-creado">0</span></li>
+            <li class="metric-row"><span class="metric-label">falso negativo</span><span class="metric-value" id="m-norev-fn">0</span></li>
+            <li class="metric-row"><span class="metric-label">confirmado no revolving</span><span class="metric-value" id="m-norev-ok">0</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="bottom-left">
+        <div class="donut-wrapper">
+          <div class="donut donut-error"><span id="pct-fp-donut">0 %</span></div>
+          <div class="donut-label">errores<div class="donut-subtitle">% falsos positivos</div></div>
+        </div>
+      </div>
+
+      <div class="bottom-center">
+        <div class="stats-summary" aria-label="Resumen de métricas">
+          <div class="stats-row"><span class="stats-label">% aceptados</span><span class="stats-value" id="pct-accepted">0 %</span></div>
+          <div class="stats-row"><span class="stats-label">% errores</span><span class="stats-value" id="pct-errors">0 %</span></div>
+          <div class="stats-row"><span class="stats-label">% falsos positivos</span><span class="stats-value" id="pct-fp">0 %</span></div>
+        </div>
+      </div>
+
+      <div class="bottom-right">
+        <div class="donut-wrapper">
+          <div class="donut donut-ok"><span id="pct-ok-donut">0 %</span></div>
+          <div class="donut-label">ok<div class="donut-subtitle">% ok</div></div>
+        </div>
+      </div>
+    </section>
+
+    <footer style="margin-top:8px; font-size:12px; color:rgba(255,255,255,.82); text-align:center; letter-spacing:.2px; visibility: hidden;">
+      © 2025 Gobierno del Principado de Asturias · ASTUR.IA
+    </footer>
+  </div>
+
+  <script>
+    // ===== Subtítulo fijo
+    document.addEventListener('DOMContentLoaded', () => {
+      const subtitle = document.getElementById('brand-subtitle');
+      if (subtitle) subtitle.textContent = 'IA · Revolving · Clasificación automática';
+    });
+
+    // ===== Auto-escala del layout + sincronización del fondo
+    (function() {
+      const rafDebounce = (fn) => {
+        let frame;
+        return (...args) => {
+          if (frame) cancelAnimationFrame(frame);
+          frame = requestAnimationFrame(() => fn(...args));
+        };
+      };
+
+      const alignToDevicePixel = (v) => {
+        const dpr = window.devicePixelRatio || 1;
+        return Math.round(v * dpr) / dpr;
+      };
+
+      function fitToViewport() {
+        const wrap = document.querySelector('.wrap');
+        const bgScene = document.querySelector('.bg-scene') || document.querySelector('.bg-stage');
+        if (!wrap) return;
+
+        const prev = wrap.style.transform;
+        wrap.style.transform = 'none';
+
+        const vv = window.visualViewport;
+        const vw = vv?.width || window.innerWidth;
+        const vh = vv?.height || window.innerHeight;
+
+        const naturalWidth = wrap.scrollWidth;
+        const naturalHeight = wrap.scrollHeight;
+
+        const scale = Math.min(vw / naturalWidth, vh / naturalHeight, 1);
+
+        const tx = alignToDevicePixel(Math.max((vw - naturalWidth * scale) / 2, 0));
+        const ty = alignToDevicePixel(Math.max((vh - naturalHeight * scale) / 2, 0));
+
+        wrap.style.transformOrigin = 'top left';
+        wrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+
+        if (bgScene) {
+          bgScene.style.transformOrigin = 'top left';
+          bgScene.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        }
+
+        if (!scale) wrap.style.transform = prev;
+      }
+
+      const onResize = rafDebounce(fitToViewport);
+
+      window.addEventListener('resize', onResize, { passive: true });
+      window.addEventListener('orientationchange', onResize);
+
+      if (window.visualViewport) {
+        visualViewport.addEventListener('resize', onResize, { passive: true });
+        visualViewport.addEventListener('scroll', onResize, { passive: true });
+      }
+
+      document.addEventListener('DOMContentLoaded', fitToViewport);
+      window.addEventListener('load', fitToViewport);
+
+      const mo = new MutationObserver(onResize);
+      mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+    })();
+
+    // ====== Dashboard: carga de JSON y métricas (con las mismas reglas que Listado) ======
+    (function(){
+      const IS_FILE = location.protocol === 'file:';
+      const HAS_FSA = typeof window.showDirectoryPicker === 'function';
+
+      // Si sirves por HTTP/HTTPS, pon aquí las rutas de tus JSON (o deja vacío y usa "Cargar carpeta JSON")
+      const JSON_FILES_HTTP = ['../data/RPL_0000168_2025.json','../data/RPL_0000279_2025.json','../data/RPL_0000301_2025.json','../data/RPL_0000311_2025.json','../data/RPL_0000373_2025.json','../data/RPL_0000427_2025.json','../data/RPL_0000442_2025.json','../data/RPL_0000454_2025.json','../data/RPL_0000485_2025.json','../data/RPL_0000563_2025.json'];
+
+      const RECORDS = []; // { id, clasif: 'rev'|'norev', estado: 'creado'|'ok'|'error'|'fp'|'fn' }
+      let CURRENT_DIR = null;
+      let OVERRIDES = {}; // { "<id>": { estado, ... } }
+
+      // ===== Persistencia de handle de directorio (IndexedDB), igual que en Listado
+      const FS_DB_NAME = 'asturia_fs';
+      const FS_STORE = 'handles';
+
+      function openHandlesDB() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open(FS_DB_NAME, 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(FS_STORE)) db.createObjectStore(FS_STORE);
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+      async function getStoredDirHandle() {
+        try {
+          const db = await openHandlesDB();
+          return await new Promise((resolve, reject) => {
+            const tx = db.transaction(FS_STORE, 'readonly');
+            const st = tx.objectStore(FS_STORE);
+            const rq = st.get('lastDir');
+            rq.onsuccess = () => resolve(rq.result || null);
+            rq.onerror = () => reject(rq.error);
+          });
+        } catch {
+          return null;
+        }
+      }
+      async function saveStoredDirHandle(handle) {
+        try {
+          const db = await openHandlesDB();
+          await new Promise((resolve, reject) => {
+            const tx = db.transaction(FS_STORE, 'readwrite');
+            const st = tx.objectStore(FS_STORE);
+            const rq = st.put(handle, 'lastDir');
+            rq.onsuccess = () => resolve();
+            rq.onerror = () => reject(rq.error);
+          });
+        } catch {}
+      }
+      async function ensureReadPermission(dirHandle) {
+        if (!dirHandle?.queryPermission || !dirHandle?.requestPermission) return true;
+        let p = await dirHandle.queryPermission({ mode: 'read' });
+        if (p === 'granted') return true;
+        if (p === 'denied') return false;
+        p = await dirHandle.requestPermission({ mode: 'read' });
+        return p === 'granted';
+      }
+      async function tryAutoLoadFromStoredHandle() {
+        if (!HAS_FSA) return false;
+        try {
+          const h = await getStoredDirHandle();
+          if (!h) return false;
+          const ok = await ensureReadPermission(h);
+          if (!ok) return false;
+          await loadCasesFromDirectoryHandle(h);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      // Sanitiza el estado a los admitidos (alineado con Listado)
+      const ALLOWED_ESTADOS = new Set(['creado','ok','error','fp','fn']);
+      const sanitizeEstado = (v) => ALLOWED_ESTADOS.has(v) ? v : 'creado';
+
+      // ===== Overrides
+      async function readOverridesFromDir(dirHandle){
+        try{
+          const fh = await dirHandle.getFileHandle('overrides.json', { create:false });
+          const file = await fh.getFile();
+          OVERRIDES = JSON.parse(await file.text() || '{}');
+        }catch(_e){ OVERRIDES = {}; }
+      }
+      function readOverridesFromLocal(){
+        try{ OVERRIDES = JSON.parse(localStorage.getItem('asturia_overrides') || '{}'); }catch(_e){ OVERRIDES = {}; }
+      }
+
+      // ===== Agregado de métricas
+      function computeAndRender(){
+        const rev = { total:0, creado:0, ok:0, error:0, fp:0 };
+        const norev = { total:0, creado:0, ok:0, fn:0 };
+        const all = { total:0, ok:0, error:0, fp:0, fn:0 };
+
+        for (const r of RECORDS){
+          all.total++;
+          if (typeof all[r.estado] === 'number') all[r.estado]++;
+
+          if (r.clasif === 'rev'){
+            rev.total++;
+            if (r.estado in rev) rev[r.estado]++;
+          } else {
+            norev.total++;
+            if (r.estado in norev) norev[r.estado]++;
+          }
+        }
+
+        const pct = (num, den) => den > 0 ? Math.round((num / den) * 100) : 0;
+        const pctOk = pct(all.ok, all.total);
+        // Consideramos "errores" = errores en borrador + falsos negativos (criterio del proyecto)
+        const pctErrors = pct(all.error + all.fn, all.total);
+        const pctFp = pct(all.fp, all.total);
+
+        // Totales REV/NOREV
+        setText('m-rev-total', rev.total);
+        setText('m-rev-total-ghost', rev.total);
+        setText('m-rev-creado', rev.creado);
+        setText('m-rev-ok', rev.ok);
+        setText('m-rev-error', rev.error);
+        setText('m-rev-fp', rev.fp);
+
+        setText('m-norev-total', norev.total);
+        setText('m-norev-creado', norev.creado);
+        setText('m-norev-fn', norev.fn);
+        setText('m-norev-ok', norev.ok);
+
+        // Porcentajes
+        setText('pct-accepted', `${pctOk} %`);
+        setText('pct-errors', `${pctErrors} %`);
+        setText('pct-fp', `${pctFp} %`);
+        setText('pct-ok-donut', `${pctOk} %`);
+        setText('pct-fp-donut', `${pctFp} %`);
+      }
+
+      function setText(id, value){
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(value);
+      }
+
+      function addRecordFromData(fileName, data){
+        const id = String(fileName || '').replace(/\.json$/,'');
+        const ov = OVERRIDES[id] || {};
+        const estado = sanitizeEstado(ov.estado || data.estado || 'creado');
+        const clasif = data && typeof data.es_revolving === 'boolean'
+          ? (data.es_revolving ? 'rev' : 'norev')
+          : 'norev'; // si falta el boolean, consideramos no revolving
+        RECORDS.push({ id, estado, clasif });
+      }
+
+      // ===== Carga HTTP
+
+      async function seedOverridesHTTP(){
+        let base = {};
+        try{ const r = await fetch('../data/overrides.json',{cache:'no-store'}); if(r.ok) base = await r.json(); }catch(_e){}
+        let local = {};
+        try{ local = JSON.parse(localStorage.getItem('asturia_overrides') || '{}'); }catch(_e){}
+        OVERRIDES = Object.assign({}, base, local);
+      }
+      async function loadCasesHTTP(){
+        if (!JSON_FILES_HTTP.length) return;
+        await seedOverridesHTTP();
+        RECORDS.length = 0;
+        await Promise.all(JSON_FILES_HTTP.map(async (path)=>{
+          try{
+            const res = await fetch(path, { cache:'no-store' });
+            if(!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            const id = path.split('/').pop();
+            addRecordFromData(id, data);
+          }catch(e){ console.warn('No se pudo cargar', path, e); }
+        }));
+        computeAndRender();
+      }
+
+      // ===== Carga desde directorio (FSA)
+      async function* walkDir(dirHandle){
+        for await (const [, handle] of dirHandle.entries()){
+          if (handle.kind === 'file') yield handle;
+          else if (handle.kind === 'directory') yield* walkDir(handle);
+        }
+      }
+      async function loadCasesFromDirectoryHandle(dirHandle){
+        CURRENT_DIR = dirHandle;
+
+        const ok = await ensureReadPermission(dirHandle);
+        if (!ok) {
+          console.warn('Permiso de lectura denegado por el usuario.');
+          return;
+        }
+
+        await readOverridesFromDir(dirHandle);
+        RECORDS.length = 0;
+
+        for await (const entry of walkDir(dirHandle)){
+          try{
+            const name = entry.name || '';
+            const low = name.toLowerCase();
+            if (!low.endsWith('.json')) continue;
+            if (low === 'overrides.json') continue;
+
+            const file = await entry.getFile();
+            const data = JSON.parse(await file.text());
+            addRecordFromData(name, data);
+          }catch(e){ console.warn('JSON inválido:', entry?.name, e); }
+        }
+        computeAndRender();
+      }
+
+      // ===== Carga desde <input webkitdirectory>
+      async function loadCasesFromDirectoryFiles(fileList){
+        readOverridesFromLocal();
+        RECORDS.length = 0;
+        const files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.json') && f.name !== 'overrides.json');
+        for (const file of files){
+          try{
+            const data = JSON.parse(await file.text());
+            addRecordFromData(file.name, data);
+          }catch(e){ console.warn('JSON inválido:', file.name, e); }
+        }
+        computeAndRender();
+      }
+
+      // ===== Wiring UI
+      function showManualPicker() {
+        const btnFolder = document.getElementById('btn-folder');
+        const dirPicker = document.getElementById('dirPicker');
+        if (!btnFolder || !dirPicker) return;
+
+        if (btnFolder.dataset.wired === '1') {
+          btnFolder.hidden = false;
+          return;
+        }
+        btnFolder.hidden = false;
+        btnFolder.dataset.wired = '1';
+        btnFolder.addEventListener('click', () => dirPicker.click());
+        dirPicker.addEventListener('change', (e) => loadCasesFromDirectoryFiles(e.target.files));
+      }
+
+      function wireActions(){
+        // Si no hay FSA o no estamos en file://, mostramos el picker manual desde el inicio
+        const isManualPreferred = !HAS_FSA || !IS_FILE;
+        if (isManualPreferred) showManualPicker();
+      }
+
+      function hidePermOverlay() {
+        const o = document.getElementById('perm-overlay');
+        if (!o) return;
+        o.hidden = true;
+        o.style.display = 'none';
+        o.setAttribute('aria-hidden','true');
+      }
+
+      // ===== Overlay de permisos para file:// con FSA (con "startIn" y persistencia del handle)
+      async function initPermissionOverlay(){
+        const overlay = document.getElementById('perm-overlay');
+        const btnAccept = document.getElementById('perm-accept');
+        const btnCancel = document.getElementById('perm-cancel');
+        if (!overlay || !btnAccept || !btnCancel) return;
+
+        overlay.hidden = false;
+
+        btnCancel.addEventListener('click', () => {
+          hidePermOverlay();
+          // Ofrece alternativa manual aunque estemos en file://
+          showManualPicker();
+        }, { once: true });
+
+        btnAccept.addEventListener('click', async () => {
+          try{
+            let startInOpt = 'documents';
+            try {
+              const prev = await getStoredDirHandle();
+              if (prev) startInOpt = prev;
+            } catch {}
+
+            const dir = await window.showDirectoryPicker({
+              id: 'asturia-json-dir',
+              startIn: startInOpt
+            });
+            await saveStoredDirHandle(dir);
+
+            hidePermOverlay();
+            await loadCasesFromDirectoryHandle(dir);
+          }catch(e){
+            console.warn('Selección cancelada o error:', e);
+            hidePermOverlay();
+            showManualPicker();
+          }
+        });
+
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && !overlay.hidden) {
+            hidePermOverlay();
+            showManualPicker();
+          }
+        }, { once: true });
+      }
+
+      // ===== Init
+      document.addEventListener('DOMContentLoaded', async ()=>{
+        wireActions();
+
+        if (!IS_FILE) {
+          // HTTP/HTTPS
+          await loadCasesHTTP();
+          // Si no hay rutas configuradas, queda el botón "Cargar carpeta JSON" para carga manual.
+        } else {
+          // file://
+          if (HAS_FSA) {
+            // Intenta autoload con el último directorio autorizado
+            const autoloaded = await tryAutoLoadFromStoredHandle();
+            if (!autoloaded) {
+              await initPermissionOverlay();
+            } else {
+              hidePermOverlay();
+            }
+          } else {
+            // Sin FSA: usa el botón de carpeta (webkitdirectory)
+            showManualPicker();
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

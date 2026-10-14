@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASTUR‑IA — Administracion</title>
+  <meta name="color-scheme" content="dark light" />
+  <meta id="theme-color" name="theme-color" content="#071b2e" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+        :root{
+      --text-main: #ffffff;
+      --text-soft: #c9d9ef;
+
+      --surface-1: rgba(10, 24, 41, 0.78);
+      --surface-2: rgba(7, 20, 35, 0.76);
+      --surface-glow: rgba(53, 196, 255, 0.08);
+      --surface-glow-alt: rgba(255, 107, 186, 0.06);
+      --surface-stroke: rgba(255,255,255,0.08);
+      --surface-stroke-strong: rgba(255,255,255,0.12);
+
+      --primary-1: #33c3ff;
+      --primary-2: #1fa0ff;
+
+      --ok: #18c964;
+      --off: #ff9c3f;
+
+      --shadow-strong: 0 22px 48px rgba(0, 0, 0, 0.55);
+      --shadow-soft: 0 14px 30px rgba(0, 0, 0, 0.38);
+
+      --radius-lg: 18px;
+
+      --font-base: 15px;
+      --font-h1: clamp(26px, 3.2vw, 40px);
+    }
+
+    /* ---------------------------
+      Reset básico + tipografía
+    ---------------------------- */
+    *{
+      box-sizing: border-box; margin:0; padding:0;
+      font-family: "Lexend", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    html, body{ height:100%; }
+    html{
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    body{
+      font-size: var(--font-base);
+      line-height: 1.45;
+      letter-spacing: 0.2px;
+      color: var(--text-main);
+      min-height: 100vh;
+      background:
+        radial-gradient(60% 45% at 50% 28%, rgba(20,120,170,0.06), rgba(0,0,0,0) 60%),
+        linear-gradient(170deg, #050b12 0%, #051426 38%, #041b2f 70%, #031421 100%);
+      background-attachment: fixed;
+    }
+
+    /* ---------------------------
+      Contenedor
+    ---------------------------- */
+    .wrap{ max-width: 1180px; margin: 0 auto; padding: 20px 22px; }
+
+    /* ---------------------------
+      Header (glass oscuro)
+    ---------------------------- */
+    .hdr{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      backdrop-filter: saturate(120%) blur(6px);
+      box-shadow: var(--shadow-soft);
+    }
+    .brand{ display:flex; align-items:center; gap:12px; color: inherit; text-decoration: none; }
+    #logoHead{
+      width: 42px; height: 42px; border-radius: 12px; border: 2px solid #ffffff; object-fit: cover;
+      box-shadow: 0 8px 18px rgba(0,0,0,.35);
+    }
+    .brand .t1{ font-weight: 800; letter-spacing: .3px; }
+    .brand .t2{ color: var(--text-soft); font-size: 13px; }
+    .hdr-actions{ display:flex; gap:10px; }
+
+    /* ---------------------------
+      Botones (base + primario)
+    ---------------------------- */
+    .btn{
+      display:inline-block; padding: 8px 16px; font-size: 14px; color:#fff; cursor:pointer; border-radius: 999px;
+      border: 1px solid var(--surface-stroke);
+      background: rgba(6, 80, 137, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.28);
+      transition: transform .12s ease, box-shadow .15s ease, filter .15s ease, background-position .3s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 26px rgba(0,0,0,.38);
+      filter: drop-shadow(0 0 10px rgba(31,160,255,.28));
+    }
+    .btn:active{ transform: translateY(0); }
+    .btn-primary{
+      border: none;
+      background: linear-gradient(135deg, var(--primary-1), var(--primary-2), var(--primary-1));
+      background-size: 200% 200%;
+      animation: btn-flow 8s ease infinite;
+    }
+    .btn-icon{ min-width: 36px; padding: 6px 10px; }
+
+    /* ---------------------------
+      Título principal
+    ---------------------------- */
+    .page-title{ display:flex; justify-content:center; margin: 12px 0 10px; }
+    .title-main{
+      font-size: var(--font-h1); font-weight: 800; letter-spacing: .3px; color:#fff;
+      padding: 14px 20px; border-radius: 16px;
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, rgba(12,26,44,.55), rgba(8,20,36,.40));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    /* ---------------------------
+      Panel principal (glass)
+    ---------------------------- */
+    .panel{
+      margin-top: 8px; padding: 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      backdrop-filter: saturate(120%) blur(6px);
+      box-shadow: var(--shadow-strong);
+      transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .panel:hover{ transform: translateY(-2px); box-shadow: 0 28px 58px rgba(0,0,0,.55); border-color: var(--surface-stroke-strong); }
+    .panel .title{ font-weight:800; font-size: 20px; margin-bottom: 12px; }
+    .pill{
+      margin-left: 8px;
+      font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+      color: #9fd9ff; background: rgba(53,196,255,.14); border: 1px solid rgba(53,196,255,.28);
+    }
+
+    /* ---------------------------
+      Controles (inputs/selects)
+    ---------------------------- */
+    .input, .select, .textarea{
+      width:100%; display:block; color:#e9f4ff;
+      background: rgba(12, 26, 44, 0.55);
+      border: 1px solid var(--surface-stroke);
+      border-radius: 10px;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .input, .select{ height: 40px; padding: 8px 12px; font-size: 14px; }
+    .textarea{ padding: 10px 12px; min-height: 90px; resize: vertical; }
+    .input::placeholder{ color: rgba(200,220,255,.5); }
+    .select{
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(200,220,255,.6) 50%),
+        linear-gradient(135deg, rgba(200,220,255,.6) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 16px, calc(100% - 13px) 16px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+    .input:focus, .select:focus, .textarea:focus{
+      outline: none;
+      border-color: var(--surface-stroke-strong);
+      box-shadow: 0 0 0 3px rgba(53,196,255,.18);
+      background: rgba(12, 26, 44, 0.7);
+    }
+
+    /* Toolbar */
+    .toolbar{
+      display:grid; gap: 8px; align-items: end; margin-bottom:10px;
+      grid-template-columns: repeat(12, minmax(0,1fr));
+    }
+    .toolbar .field{ grid-column: span 12; min-width: 0; }
+    .field label{ display:block; margin-bottom:6px; font-size: 13px; color: var(--text-soft); }
+
+    /* Distribución desktop */
+    @media (min-width: 860px){
+      .toolbar .field:nth-child(1){ grid-column: span 2; } /* Mostrar */
+      .toolbar .field:nth-child(2){ grid-column: span 3; } /* Rol */
+      .toolbar .field:nth-child(3){ grid-column: span 2; } /* Estado */
+      .toolbar .field:nth-child(4){ grid-column: span 3; } /* Buscar */
+      #fBtns,
+      .toolbar-actions{
+        grid-column: span 2; display:flex; gap:8px; justify-content:flex-end; align-items:flex-end; flex-wrap: nowrap;
+      }
+    }
+    #fBtns .btn, .toolbar-actions .btn{ white-space: nowrap; }
+
+    /* ---------------------------
+      Tabla estilo "listado"
+    ---------------------------- */
+    .list{
+      overflow:auto;
+      border-radius: 12px;
+      border: 1px solid var(--surface-stroke);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+    }
+    .list table{ width:100%; border-collapse: collapse; }
+    .list thead th{
+      position: sticky; top: 0; z-index: 1;
+      background: rgba(14, 28, 48, 0.92);
+      color: #e8f2ff; font-weight: 700; font-size: 14px;
+      backdrop-filter: blur(4px);
+    }
+    .list th, .list td{
+      padding: 12px 14px; font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .list tbody tr:nth-child(even){ background: rgba(255,255,255,.02); }
+    .list tbody tr:hover{ background: rgba(53,196,255,.06); }
+
+    /* Ordenable */
+    .list th[data-key], #auditModal th[data-akey]{ cursor:pointer; transition: color .2s ease; }
+    .list th[data-key]:hover, #auditModal th[data-akey]:hover{ color:#9fd9ff; }
+    th.th-sort-asc::after{ content:" ▲"; opacity:.6; }
+    th.th-sort-desc::after{ content:" ▼"; opacity:.6; }
+
+    /* Selects dentro de celdas (para Rol) */
+    .list td .select{
+      height:32px; padding: 4px 10px; font-size: 13px;
+      border-radius: 999px; background: rgba(255,255,255,0.06);
+      border: 1px solid var(--surface-stroke);
+      background-position: calc(100% - 14px) 12px, calc(100% - 9px) 12px;
+    }
+    .nowrap{ white-space: nowrap; }
+
+    /* ---------------------------
+      Badges de estado (Activo/Inactivo)
+    ---------------------------- */
+    .badge{
+      display:inline-flex; align-items:center; justify-content:center;
+      height: 30px; padding: 0 12px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 700; letter-spacing:.2px;
+    }
+    .badge-ok{
+      background: rgba(24,201,100,.12); color:#b5ffda;
+      border-color: rgba(24,201,100,.35);
+    }
+    .badge-off{
+      background: rgba(255,156,63,.12); color:#ffe1c8;
+      border-color: rgba(255,156,63,.35);
+    }
+
+    /* ---------------------------
+      Acciones (2 botones)
+    ---------------------------- */
+    .actions-cell{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(36px, 1fr));
+      gap: 8px 10px; justify-items:center; align-items:center; padding:4px;
+    }
+    .actions-cell .btn{
+      min-width:38px; justify-content:center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--surface-stroke);
+      box-shadow: 0 2px 6px rgba(0,0,0,.18);
+    }
+    .actions-cell .btn:hover{
+      background: rgba(53,196,255,.12);
+      box-shadow: 0 8px 18px rgba(0,0,0,.3);
+    }
+
+    /* ---------------------------
+      Paginación
+    ---------------------------- */
+    .pager{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top: 10px; }
+    .sub{ color: var(--text-soft); font-size: 13px; }
+    .pages{ display:flex; gap:6px; flex-wrap: wrap; }
+    .page-btn{
+      padding: 6px 10px; border-radius: 999px; font-size: 13px; cursor:pointer;
+      background: rgba(255,255,255,0.06); color:#e8f2ff; border: 1px solid var(--surface-stroke);
+      transition: transform .12s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .page-btn:hover{ transform: translateY(-1px); background: rgba(53,196,255,.14); box-shadow: 0 8px 18px rgba(0,0,0,.28); }
+    .page-btn[aria-current="true"]{
+      background: linear-gradient(135deg, var(--primary-1), var(--primary-2), var(--primary-1));
+      color:#fff; border: none; box-shadow: 0 8px 20px rgba(31,160,255,.4);
+    }
+    .page-btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    /* ---------------------------
+      Toast
+    ---------------------------- */
+    .toast{
+      position: fixed; bottom: 22px; right: 24px;
+      background: linear-gradient(180deg, #1fa0ff, #1782d4);
+      color:#fff; padding: 12px 18px; border-radius: 10px;
+      box-shadow: 0 8px 22px rgba(29,78,216,.35);
+      opacity: 0; transform: translateY(20px);
+      transition: all .35s ease; pointer-events:none; z-index: 9999; font-size:14px;
+    }
+    .toast.show{ opacity:1; transform: translateY(0); }
+
+    /* ---------------------------
+      Modal Seguridad/Auditoría
+    ---------------------------- */
+    .modal{ position: fixed; inset:0; z-index:70; display:none; }
+    .modal.open{ display:block; }
+    .modal-backdrop{ position:absolute; inset:0; background: rgba(3,10,20,.6); backdrop-filter: blur(2px); }
+    .modal-dialog{
+      position: relative; margin: 8vh auto 0; width: calc(100% - 32px); max-width: 1060px;
+      border-radius: var(--radius-lg); overflow:hidden;
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      box-shadow: var(--shadow-strong);
+      animation: modalIn .22s ease-out;
+    }
+    @keyframes modalIn{ from{ transform: translateY(12px); opacity:.6; } to{ transform:none; opacity:1; } }
+    .modal-header{ display:flex; align-items:center; justify-content:space-between; padding: 12px 16px; border-bottom: 1px solid var(--surface-stroke); }
+    .modal-body{ padding: 12px 16px 16px; }
+
+    /* Toolbar del modal */
+    .audit-toolbar .field{ grid-column: span 12; }
+    @media (min-width: 860px){
+      .audit-toolbar .field:nth-child(1){ grid-column: span 6; }
+      .audit-toolbar .field:nth-child(2){ grid-column: span 3; }
+      .audit-toolbar .field.audit-btns{ grid-column: span 3; display:flex; justify-content:flex-end; align-items:flex-end; }
+    }
+
+    /* Tabla del modal */
+    .audit-table-wrapper{ max-height: 60vh; overflow:auto; border-radius: 12px; }
+
+    /* ---------------------------
+      Responsive
+    ---------------------------- */
+    @media (max-width: 720px){
+      .list th, .list td{ padding:8px 10px; font-size:13px; }
+      .actions-cell{ grid-template-columns: repeat(2, 1fr); gap:6px 8px; }
+      .title-main{ font-size:22px; padding: 10px 14px; }
+    }
+
+    /* ---------------------------
+      Animaciones
+    ---------------------------- */
+    @keyframes btn-flow{
+      0%{ background-position: 0% 50%; }
+      50%{ background-position: 100% 50%; }
+      100%{ background-position: 0% 50%; }
+    }
+
+    /* Preferencias de usuario */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .page-btn, .toast, .panel{ transition:none !important; animation:none !important; }
+    }
+
+    /* ---------------------------
+      Fix estética del menú <select> en dark
+    ---------------------------- */
+    .select,
+    .list td .select{
+      color-scheme: dark;              /* fuerza tema oscuro del control nativo */
+      position: relative; z-index: 1;  /* evita que quede por debajo en tabla */
+    }
+    .list td .select:focus{ z-index: 5; }
+
+    /* Fondo y color de las opciones (navegadores compatibles) */
+    .select option,
+    .select optgroup{
+      background-color: #0b1a2c;
+      color: #e8f2ff;
+    }
+
+    /* ---------------------------
+      Popover (acciones/credenciales)
+    ---------------------------- */
+    .popover{
+      position: fixed; z-index: 10000;
+      width: 300px; max-width: calc(100vw - 32px);
+      padding: 12px; border-radius: var(--radius-lg);
+      border: 1px solid var(--surface-stroke);
+      background:
+        radial-gradient(120% 120% at -10% -10%, var(--surface-glow) 0%, rgba(0,0,0,0) 35%),
+        radial-gradient(100% 100% at 120% 120%, var(--surface-glow-alt) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(180deg, var(--surface-1), var(--surface-2));
+      box-shadow: var(--shadow-strong);
+      backdrop-filter: saturate(120%) blur(6px);
+      animation: modalIn .18s ease-out;
+    }
+    .pop-title{ font-weight: 800; margin-bottom: 8px; }
+    .pop-grid{ display: grid; gap: 8px; }
+    .pop-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top: 6px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <header class="hdr" role="banner">
+      <a class="brand" href="Dashboard.html" title="Volver al Dashboard">
+        <img src="../img/logolimpio.png" alt="Logo ASTUR.IA" id="logoHead" />
+        <div>
+          <div class="t1">Astur.IA</div>
+          <div class="t2">Admin</div>
+        </div>
+      </a>
+      <div class="hdr-actions">
+        <button id="auditBtn" class="btn" title="Seguridad y Auditoría">🔒 Log de Cambios</button>
+        <a class="btn" href="Login.html" title="Volver al Dashboard">← Salir</a>
+      </div>
+    </header>
+
+    <!-- Panel principal -->
+    <main class="panel panel-elevated" role="main">
+      <h1 class="page-title">Panel de Administración</h1>
+
+      <!-- Filtros -->
+      <section class="toolbar toolbar-rounded" aria-label="Filtros de usuarios">
+        <div class="field">
+          <label for="pageSize">Nª de Usuarios</label>
+          <select id="pageSize" class="select" aria-label="Tamaño de página">
+            <option>10</option>
+            <option selected>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="roleFilter">Rol</label>
+          <select id="roleFilter" class="select" aria-label="Filtrar por rol">
+            <option value="">Todos</option>
+            <option>Magistrado</option>
+            <option>Técnico</option>
+            <option>IA Supervisor</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="statusFilter">Estado</label>
+          <select id="statusFilter" class="select" aria-label="Filtrar por estado">
+            <option value="">Todos</option>
+            <option>Activo</option>
+            <option>Inactivo</option>
+          </select>
+        </div>
+
+        <div class="field field-grow">
+          <label for="search">Buscar</label>
+          <input id="search" type="text" class="input" placeholder="Usuario, rol…" aria-label="Buscar por usuario o rol">
+        </div>
+
+        <div class="field toolbar-actions">
+          <button id="resetBtn" class="btn" type="button">Reiniciar filtros</button>
+          <button id="exportBtn" class="btn btn-primary" type="button">Exportar CSV</button>
+        </div>
+      </section>
+
+      <!-- Tabla -->
+      <div class="list list-rounded" role="region" aria-label="Listado de usuarios">
+        <table id="tbl" aria-describedby="rangeInfo">
+          <thead>
+            <tr>
+              <th scope="col" data-key="usuario">Usuario</th>
+              <th scope="col" data-key="rol">Rol</th>
+              <th scope="col" data-key="ultimoAcceso">Último acceso</th>
+              <th scope="col" data-key="casos">Casos asignados</th>
+              <th scope="col" data-key="estado">Estado</th>
+              <th scope="col" style="cursor:default; text-align:center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <nav class="pager" role="navigation" aria-label="Paginación">
+        <div id="rangeInfo" class="sub">—</div>
+        <div class="pages" id="pages"></div>
+      </nav>
+    </main>
+
+    <footer>© 2025 Gobierno del Principado de Asturias · ASTUR.IA</footer>
+  </div>
+
+  <!-- Modal Seguridad/Auditoría -->
+  <div id="auditModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="auditTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="document">
+      <div class="modal-header">
+        <div class="title" id="auditTitle" style="margin:0">Seguridad y Auditoría</div>
+        <button id="auditClose" class="btn btn-icon" aria-label="Cerrar">✖</button>
+      </div>
+      <div class="modal-body">
+        <div class="toolbar audit-toolbar" aria-label="Filtros de auditoría">
+          <div class="field" style="min-width:220px">
+            <label for="auditSearch">Buscar</label>
+            <input id="auditSearch" type="text" class="input" placeholder="Usuario, acción, ID sesión" data-autofocus aria-label="Buscar en auditoría">
+          </div>
+          <div class="field" style="min-width:160px">
+            <label for="auditResult">Resultado</label>
+            <select id="auditResult" class="select" aria-label="Filtrar por resultado">
+              <option value="">Todos</option>
+              <option>OK</option>
+              <option>Error</option>
+              <option>Denegado</option>
+            </select>
+          </div>
+          <div class="field audit-btns">
+            <button id="auditExport" class="btn btn-primary" type="button">Exportar CSV</button>
+          </div>
+        </div>
+
+        <div class="list audit-table-wrapper" role="region" aria-label="Tabla de auditoría">
+          <table id="auditTable">
+            <thead>
+              <tr>
+                <th scope="col" data-akey="idSesion">ID sesión</th>
+                <th scope="col" data-akey="usuario">Usuario</th>
+                <th scope="col" data-akey="accion">Acción registrada</th>
+                <th scope="col" data-akey="fecha">Fecha/Hora</th>
+                <th scope="col" data-akey="resultado">Resultado</th>
+              </tr>
+            </thead>
+            <tbody id="auditTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Utils =====
+    const $ = (id) => document.getElementById(id);
+    const clamp = (x,a,b)=> Math.max(a, Math.min(b, x));
+    function prng(seed){ let t=seed>>>0; return ()=> (t=(t*1664525+1013904223)>>>0)/2**32; }
+    function toLocalDateTime(iso){ return new Date(iso).toLocaleString('es-ES'); }
+    function esc(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[m])); }
+
+    // ===== Catálogos =====
+    const ROLES = ['Magistrado','Técnico','IA Supervisor'];
+    const STATUS = ['Activo','Inactivo'];
+
+    // ===== Datos mock =====
+    function seedUsers(n=40){
+      const rnd = prng(20251103);
+      const baseNames = [
+        'Admin','mgarcia','alvarezj','clopez','cfernandez','sgonzalez','phernandez',
+        'lruiz','arodriguez','msuarez','diego','lucia','jperez','irene','nlopez',
+        'sramirez','pmoreno','erubio','jcortes','bmartin','noelia','jorge','claudia'
+      ];
+      const rows = [];
+      const now = Date.now();
+
+      rows.push({
+        usuario: 'Admin',
+        rol: 'IA Supervisor',
+        ultimoAcceso: new Date(now - 60*60*1000).toISOString(),
+        casos: 0,
+        estado: 'Activo'
+      });
+
+      for(let i=0; i<n-1; i++){
+        const name = baseNames[i % baseNames.length] + (i>baseNames.length? String(i) : '');
+        const rol = ROLES[Math.floor(rnd()*ROLES.length)];
+        const activo = rnd() > 0.12;
+        const daysAgo = Math.floor(rnd()*40);
+        const minutes = Math.floor(rnd()*1440);
+        const last = new Date(now - (daysAgo*24*60 + minutes)*60*1000);
+        rows.push({
+          usuario: name,
+          rol,
+          ultimoAcceso: last.toISOString(),
+          casos: Math.floor(rnd()*35),
+          estado: activo ? 'Activo' : 'Inactivo'
+        });
+      }
+      return rows.sort((a,b)=> b.ultimoAcceso.localeCompare(a.ultimoAcceso));
+    }
+
+    // ===== Estado =====
+    const state = {
+      data: seedUsers(36),
+      filtered: [],
+      sort: { key: 'ultimoAcceso', dir: 'desc' },
+      page: 1,
+      size: Number(localStorage.getItem('astur-users-pagesize') || 25),
+      role: '',
+      status: '',
+      q: ''
+    };
+
+    // ===== Auditoría (modal) =====
+    function seedAudit(n=180){
+      const rnd = prng(20251103 ^ 0xA11D17);
+      const actions = ['Inicio de sesión','Cierre de sesión','Lectura','Edición','Validación','Exportación CSV','Cambio de rol','Cambio de estado'];
+      const resultados = ['OK','Error','Denegado'];
+      const users = state.data.map(u=>u.usuario);
+      const now = Date.now();
+      const rows = [];
+      for(let i=0;i<n;i++){
+        const user = users[Math.floor(rnd()*users.length)];
+        const acc = actions[Math.floor(rnd()*actions.length)];
+        const res = rnd() < 0.82 ? 'OK' : (rnd() < 0.6 ? 'Denegado' : 'Error');
+        const minutesAgo = Math.floor(rnd()*60*24*30);
+        const date = new Date(now - minutesAgo*60*1000);
+        rows.push({
+          idSesion: Math.floor(rnd()*1e9).toString(16),
+          usuario: user,
+          accion: acc,
+          fecha: date.toISOString(),
+          resultado: res,
+        });
+      }
+      return rows.sort((a,b)=> b.fecha.localeCompare(a.fecha));
+    }
+    const audit = {
+      data: [],
+      filtered: [],
+      q: '',
+      result: '',
+      sort: { key: 'fecha', dir: 'desc' }
+    };
+
+    function applyAuditFilters(){
+      let rows = audit.data.slice();
+      if(audit.result) rows = rows.filter(r => r.resultado === audit.result);
+      if(audit.q){
+        const q = audit.q.toLowerCase();
+        rows = rows.filter(r =>
+          r.usuario.toLowerCase().includes(q) ||
+          r.accion.toLowerCase().includes(q) ||
+          r.idSesion.toLowerCase().includes(q)
+        );
+      }
+      const { key, dir } = audit.sort;
+      rows.sort((a,b)=>{
+        let av=a[key], bv=b[key], cmp=0;
+        cmp = String(av).localeCompare(String(bv));
+        return dir==='asc' ? cmp : -cmp;
+      });
+      audit.filtered = rows;
+    }
+
+    function renderAuditTable(){
+      applyAuditFilters();
+      const tb = $('auditTbody'); tb.innerHTML = '';
+      const pageRows = audit.filtered; // sin paginación, scroll interno
+      for(const r of pageRows){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${esc(r.idSesion)}</td>
+          <td>${esc(r.usuario)}</td>
+          <td>${esc(r.accion)}</td>
+          <td>${esc(toLocalDateTime(r.fecha))}</td>
+          <td>${esc(r.resultado)}</td>
+        `;
+        tb.appendChild(tr);
+      }
+
+      document.querySelectorAll('#auditModal th[data-akey]').forEach(th=>{
+        th.classList.remove('th-sort-asc','th-sort-desc');
+        if(th.dataset.akey === audit.sort.key){
+          th.classList.add(audit.sort.dir==='asc'?'th-sort-asc':'th-sort-desc');
+        }
+      });
+    }
+
+    function exportAuditCSV(){
+      applyAuditFilters();
+      const rows = audit.filtered;
+      const header = ['ID sesión','Usuario','Acción','Fecha/Hora','Resultado'];
+      const csv = [header.join(';')].concat(
+        rows.map(r=> [r.idSesion, r.usuario, r.accion, toLocalDateTime(r.fecha), r.resultado]
+          .map(x=> String(x).replaceAll(';',',')).join(';'))
+      ).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'auditoria_astur_ia.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // ===== Filtrado/Orden (usuarios) =====
+    function applyFilters(){
+      let rows = state.data.slice();
+
+      if(state.role)   rows = rows.filter(r=> r.rol === state.role);
+      if(state.status) rows = rows.filter(r=> r.estado === state.status);
+
+      if(state.q){
+        const q = state.q.toLowerCase();
+        rows = rows.filter(r =>
+          r.usuario.toLowerCase().includes(q) ||
+          r.rol.toLowerCase().includes(q)
+        );
+      }
+
+      const {key, dir} = state.sort;
+      rows.sort((a,b)=>{
+        let av=a[key], bv=b[key], cmp=0;
+        if(key==='ultimoAcceso'){
+          cmp = String(av).localeCompare(String(bv));
+        }else if(key==='casos'){
+          cmp = (av - bv);
+        }else{
+          cmp = String(av).localeCompare(String(bv));
+        }
+        return dir==='asc' ? cmp : -cmp;
+      });
+
+      state.filtered = rows;
+    }
+
+    // ===== Popover helpers (Credenciales) =====
+    let popover = null;
+    function closePopover(){
+      if(popover){
+        popover.remove(); popover = null;
+        document.removeEventListener('mousedown', onOutsideClick);
+        document.removeEventListener('keydown', onPopKey);
+      }
+    }
+    function onOutsideClick(e){
+      if(popover && !popover.contains(e.target)) closePopover();
+    }
+    function onPopKey(e){
+      if(e.key === 'Escape'){ e.preventDefault(); closePopover(); }
+    }
+    function placePopover(anchor, el){
+      const r = anchor.getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const ph = el.offsetHeight, pw = el.offsetWidth;
+      let top = r.bottom + 8; if(top + ph > vh) top = r.top - ph - 8;
+      let left = Math.min(vw - pw - 12, Math.max(12, r.left + r.width/2 - pw/2));
+      el.style.top = top + 'px'; el.style.left = left + 'px';
+    }
+
+    // ===== Render Tabla/Paginación (usuarios) =====
+    function roleSelectHtml(value, user){
+      const opts = ROLES.map(r=> `<option ${r===value?'selected':''}>${esc(r)}</option>`).join('');
+      return `<select class="select" data-type="role" data-user="${esc(user)}" aria-label="Cambiar rol">${opts}</select>`;
+    }
+    function statusBadgeHtml(value){
+      const ok = value === 'Activo';
+      return `<span class="badge ${ok?'badge-ok':'badge-off'}">${esc(value)}</span>`;
+    }
+    function actionsHtml(user, currentStatus){
+      const toggleLabel = currentStatus==='Activo' ? 'Desactivar' : 'Activar';
+      return `
+        <div class="actions-cell nowrap" style="justify-content:center">
+          <button class="btn btn-icon" data-action="cred" data-user="${esc(user)}" title="Credenciales" aria-label="Credenciales de ${esc(user)}">👁️</button>
+          <button class="btn btn-icon" data-action="toggle" data-user="${esc(user)}" title="${toggleLabel}" aria-label="${toggleLabel} ${esc(user)}">${currentStatus==='Activo'?'⛔':'✅'}</button>
+        </div>
+      `;
+    }
+
+    function renderTable(){
+      closePopover(); // evitar popover huérfano al re-render
+      applyFilters();
+      const tb = $('tbody'); tb.innerHTML = '';
+      const start = (state.page-1)*state.size;
+      const pageRows = state.filtered.slice(start, start+state.size);
+
+      for(const r of pageRows){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${esc(r.usuario)}</td>
+          <td>${roleSelectHtml(r.rol, r.usuario)}</td>
+          <td>${esc(toLocalDateTime(r.ultimoAcceso))}</td>
+          <td>${esc(r.casos)}</td>
+          <td>${statusBadgeHtml(r.estado)}</td>
+          <td style="text-align:center">${actionsHtml(r.usuario, r.estado)}</td>
+        `;
+        tb.appendChild(tr);
+      }
+
+      const total = state.filtered.length;
+      const end = Math.min(start + pageRows.length, total);
+      $('rangeInfo').textContent = total ? `Mostrando ${start+1}–${end} de ${total}` : 'Sin resultados';
+
+      document.querySelectorAll('th[data-key]').forEach(th=>{
+        th.classList.remove('th-sort-asc','th-sort-desc');
+        if(th.dataset.key === state.sort.key) th.classList.add(state.sort.dir==='asc'?'th-sort-asc':'th-sort-desc');
+      });
+
+      renderPager(total);
+    }
+
+    function renderPager(total){
+      const pages = Math.max(1, Math.ceil(total / state.size));
+      state.page = clamp(state.page, 1, pages);
+      const box = $('pages'); box.innerHTML = '';
+
+      const mkBtn = (label, page, current=false, disabled=false)=>{
+        const b = document.createElement('button');
+        b.className='page-btn';
+        b.textContent = label;
+        if(current) b.setAttribute('aria-current','true');
+        if(disabled){ b.disabled=true; b.style.opacity=.6 }
+        b.addEventListener('click', ()=>{ state.page = page; renderTable(); });
+        return b;
+      };
+
+      box.appendChild(mkBtn('«', 1, false, state.page===1));
+      box.appendChild(mkBtn('‹', Math.max(1,state.page-1), false, state.page===1));
+
+      const windowSize = 5;
+      let from = Math.max(1, state.page - 2);
+      let to = Math.min(pages, from + windowSize - 1);
+      from = Math.max(1, Math.min(from, to - windowSize + 1));
+
+      for(let p=from; p<=to; p++) box.appendChild(mkBtn(String(p), p, p===state.page));
+
+      box.appendChild(mkBtn('›', Math.min(pages,state.page+1), false, state.page===pages));
+      box.appendChild(mkBtn('»', pages, false, state.page===pages));
+    }
+
+    function updateUser(usuario, patch){
+      const idx = state.data.findIndex(u=> u.usuario === usuario);
+      if(idx === -1) return;
+      state.data[idx] = { ...state.data[idx], ...patch, ultimoAcceso: state.data[idx].ultimoAcceso };
+    }
+
+    function exportCSV(){
+      applyFilters();
+      const rows = state.filtered;
+      const header = ['Usuario','Rol','Último acceso','Casos asignados','Estado'];
+      const csv = [header.join(';')].concat(
+        rows.map(r=> [r.usuario, r.rol, toLocalDateTime(r.ultimoAcceso), r.casos, r.estado]
+          .map(x=> String(x).replaceAll(';',',')).join(';'))
+      ).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'usuarios_astur_ia.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function showToast(msg) {
+      let toast = document.getElementById('toast');
+      let txt = document.getElementById('toastMsg');
+      if(!toast){
+        toast = document.createElement('div'); toast.id='toast'; toast.className='toast'; toast.setAttribute('aria-live','polite'); toast.setAttribute('aria-hidden','true');
+        const span = document.createElement('span'); span.id='toastMsg'; toast.appendChild(span);
+        document.body.appendChild(toast); txt = span;
+      }
+      txt.textContent = msg;
+      toast.setAttribute('aria-hidden','false');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.setAttribute('aria-hidden','true');
+      }, 2400);
+    }
+
+    // ===== Popover Credenciales =====
+    function openCredPopover(user, anchor){
+      closePopover();
+      const row = state.data.find(u=> u.usuario === user);
+      if(!row) return;
+      popover = document.createElement('div');
+      popover.className = 'popover';
+      popover.innerHTML = `
+        <div class="pop-title">Credenciales</div>
+        <div class="pop-grid">
+          <div>
+            <label for="popUser" class="sub">Usuario</label>
+            <input id="popUser" class="input" type="text" value="${esc(row.usuario)}" />
+          </div>
+          <div>
+            <label for="popPass" class="sub">Contraseña temporal (opcional)</label>
+            <input id="popPass" class="input" type="password" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="pop-actions">
+          <button class="btn" data-pop="cancel">Cancelar</button>
+          <button class="btn btn-primary" data-pop="save">Guardar</button>
+        </div>
+      `;
+      document.body.appendChild(popover);
+      placePopover(anchor, popover);
+
+      const $user = popover.querySelector('#popUser');
+      const $pass = popover.querySelector('#popPass');
+      $user.focus();
+
+      popover.addEventListener('click', (e)=>{
+        const b = e.target.closest('[data-pop]');
+        if(!b) return;
+        if(b.dataset.pop === 'cancel'){ closePopover(); return; }
+        if(b.dataset.pop === 'save'){
+          const newUser = $user.value.trim();
+          const tempPass = $pass.value.trim();
+          if(newUser && newUser !== user){
+            if(state.data.some(u=> u.usuario.toLowerCase() === newUser.toLowerCase())){
+              showToast('El usuario ya existe'); return;
+            }
+            updateUser(user, { usuario: newUser });
+          }
+          if(tempPass){ showToast(`Contraseña temporal establecida para ${newUser || user}`); }
+          else if(newUser !== user){ showToast(`Usuario actualizado: ${user} → ${newUser}`); }
+          closePopover(); renderTable();
+        }
+      });
+
+      setTimeout(()=>{ document.addEventListener('mousedown', onOutsideClick); document.addEventListener('keydown', onPopKey); }, 0);
+    }
+
+    // ===== Modal helpers (apertura, cierre, trap de foco) =====
+    let _auditPrevFocus = null;
+    function openAudit(){
+      if(!audit.data.length) audit.data = seedAudit(180);
+      $('auditModal').classList.add('open');
+      $('auditModal').setAttribute('aria-hidden','false');
+      _auditPrevFocus = document.activeElement;
+      renderAuditTable();
+      const first = $('auditModal').querySelector('[data-autofocus]') || $('auditModal').querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if(first) first.focus();
+      document.addEventListener('keydown', onAuditKeydown);
+    }
+    function closeAudit(){
+      $('auditModal').classList.remove('open');
+      $('auditModal').setAttribute('aria-hidden','true');
+      document.removeEventListener('keydown', onAuditKeydown);
+      if(_auditPrevFocus) _auditPrevFocus.focus();
+    }
+    function onAuditKeydown(e){
+      if(e.key === 'Escape'){ e.preventDefault(); closeAudit(); return; }
+      if(e.key === 'Tab'){
+        const root = $('auditModal');
+        const nodes = root.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const f = Array.from(nodes).filter(el=> !el.disabled && el.offsetParent !== null);
+        if(!f.length) return;
+        const first = f[0], last = f[f.length-1];
+        if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+    }
+
+    // ===== Eventos =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sort (usuarios)
+      document.querySelectorAll('th[data-key]').forEach(th=>{
+        th.addEventListener('click', ()=>{
+          const k = th.dataset.key;
+          if(state.sort.key === k){ state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc'; }
+          else { state.sort.key = k; state.sort.dir = (k==='ultimoAcceso' || k==='casos') ? 'desc' : 'asc'; }
+          renderTable();
+        });
+      });
+
+      // Filtros (usuarios)
+      $('pageSize').value = String(state.size);
+      $('pageSize').addEventListener('change', e=>{
+        state.size = Number(e.target.value)||25;
+        localStorage.setItem('astur-users-pagesize', String(state.size));
+        state.page=1; renderTable();
+      });
+
+      $('roleFilter').addEventListener('change', e=>{ state.role = e.target.value; state.page=1; renderTable(); });
+      $('statusFilter').addEventListener('change', e=>{ state.status = e.target.value; state.page=1; renderTable(); });
+      $('search').addEventListener('input', e=>{ state.q = e.target.value.trim(); state.page=1; renderTable(); });
+
+      $('resetBtn').addEventListener('click', ()=>{
+        $('roleFilter').value = state.role = '';
+        $('statusFilter').value = state.status = '';
+        $('search').value = state.q = '';
+        state.page=1; renderTable();
+      });
+
+      $('exportBtn').addEventListener('click', exportCSV);
+
+      // Delegación cambios inline (Rol)
+      $('tbody').addEventListener('change', (e)=>{
+        const sel = e.target.closest('select[data-type]');
+        if(!sel) return;
+        const user = sel.dataset.user;
+        const type = sel.dataset.type;
+        if(type === 'role'){
+          updateUser(user, { rol: sel.value });
+          showToast(`Rol actualizado para ${user}: ${sel.value}`);
+          renderTable();
+        }
+      });
+
+      // Delegación botones (Credenciales / Activar-Desactivar)
+      $('tbody').addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-action]');
+        if(!btn) return;
+        const user = btn.dataset.user;
+        const action = btn.dataset.action;
+        const row = state.data.find(u=> u.usuario===user);
+        if(!row) return;
+
+        if(action==='cred'){
+          openCredPopover(user, btn);
+        }else if(action==='toggle'){
+          const nuevo = row.estado==='Activo' ? 'Inactivo' : 'Activo';
+          updateUser(user, { estado: nuevo });
+          showToast(`${user} ${nuevo==='Activo'?'activado':'desactivado'}`);
+          renderTable();
+        }
+      });
+
+      // Modal Seguridad/Auditoría
+      $('auditBtn').addEventListener('click', openAudit);
+      $('auditClose').addEventListener('click', closeAudit);
+      $('auditModal').addEventListener('click', (e)=>{ if(e.target.classList.contains('modal-backdrop')) closeAudit(); });
+      $('auditSearch').addEventListener('input', e=>{ audit.q = e.target.value.trim(); renderAuditTable(); });
+      $('auditResult').addEventListener('change', e=>{ audit.result = e.target.value; renderAuditTable(); });
+      $('auditExport').addEventListener('click', exportAuditCSV);
+      document.querySelectorAll('#auditModal th[data-akey]').forEach(th=>{
+        th.addEventListener('click', ()=>{
+          const k = th.dataset.akey;
+          if(audit.sort.key === k){ audit.sort.dir = audit.sort.dir === 'asc' ? 'desc' : 'asc'; }
+          else { audit.sort.key = k; audit.sort.dir = (k==='fecha') ? 'desc' : 'asc'; }
+          renderAuditTable();
+        });
+      });
+
+      // Inicializar
+      renderTable();
+    });
+  </script>
+
+  <!-- Notificación flotante -->
+  <div id="toast" class="toast" aria-live="polite" aria-hidden="true">
+    <span id="toastMsg"></span>
+  </div>
+</body>
+</html>

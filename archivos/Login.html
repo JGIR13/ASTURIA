@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASTUR‑IA — Inicio de sesión</title>
+  <meta name="color-scheme" content="light" />
+  <meta id="theme-color" name="theme-color" content="#eef3f9" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome (deja solo una versión) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <style>
+    /* ====== Imports (fuente) ====== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap');
+
+/* ====== Variables y base ====== */
+:root{
+  --ink:#0f172a;           /* texto principal */
+  --muted:#475569;         /* texto secundario */
+  --panel: rgba(255,255,255,.72);
+  --panel-strong: rgba(255,255,255,.85);
+  --border: rgba(15,23,42,.12);
+  --shadow: 0 10px 30px rgba(2,6,23,.18);
+  --accent:#274690;
+  --accent-2:#1b3167;
+  --ok:#16a34a;
+  --bad:#dc2626;
+  --warn:#f59e0b;
+  --chip:#0ea5e9;
+  --canvas-grid:#e5e7eb;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: "Lexend", "Inter", sans-serif;
+}
+
+*{
+  box-sizing: border-box;
+  transition: background-color .3s ease, color .3s ease, box-shadow .3s ease;
+}
+
+html, body{ height:100% }
+html{ color-scheme: light; }
+
+body{
+  margin:0;
+  color:var(--ink);
+  font:400 14px/1.5 var(--font-body);
+  background:#0b1220;  /* color base debajo de la foto */
+}
+
+/* Títulos, encabezados y métricas usan Lexend */
+h1, h2, h3, h4, .t1, .card-kpi .v, .gauge-value {
+  font-family: var(--font-heading);
+}
+
+/* ====== Fondos fotográficos reutilizables ======
+   Añade en <body>:
+   - class="bg-photo bg-dashboard" (Dashboard/Listado) o
+   - style="--bg-image:url(...)" si quieres sobreescribir la imagen
+*/
+.bg-photo{
+  background: #0b1220 var(--bg-image, none) no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Dashboard/Listado (opcional si usas --bg-image inline) */
+.bg-dashboard{ --bg-image: url('BGPDA.jpg'); }
+
+/* Velo y viñeteo para legibilidad sobre foto */
+.bg-overlay{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(1200px 700px at 20% 15%, rgba(255,255,255,.06), transparent 60%),
+    radial-gradient(1200px 700px at 80% 10%, rgba(255,255,255,.04), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55));
+  mix-blend-mode: normal;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+/* La variante .bg-overlay.mist es específica de Login -> EstilosLogin.css */
+
+/* ====== Contenedor principal ====== */
+.wrap{ position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:20px; }
+.wrap { animation: fadeIn .6s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ====== Header ====== */
+.hdr{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;
+  background: var(--panel); border:1px solid var(--border); border-radius:14px; padding:10px 12px;
+  box-shadow: var(--shadow); backdrop-filter: blur(6px) saturate(180%);
+}
+.brand{ display:flex; align-items:center; gap:12px }
+#logoHead{ width:auto; height:9vh; }
+/* .brand .t1{ font-weight:700 }
+.brand .t2{ font-size:12px; color:var(--muted) } */
+.brand .t1 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+.brand .t2 {
+  font-weight: 500;
+  color: var(--muted);
+}
+.hdr-actions{ display:flex; align-items:center; gap:10px }
+
+/* ====== Botones ====== */
+.btn{
+  border:1px solid var(--border); background:var(--panel-strong); color:var(--ink);
+  border-radius:10px; padding:8px 10px; font-size:13px; cursor:pointer; user-select:none;
+  transition: transform .12s ease, box-shadow .2s ease, background-color .2s ease;
+  box-shadow: var(--shadow); position:relative; overflow:hidden; text-decoration:none; display:inline-block;
+}
+.btn:hover{ transform: translateY(-1px) }
+.btn:active{ transform: translateY(0) scale(.98) }
+.btn::after{ content:""; position:absolute; inset:0; background:rgba(255,255,255,.12); opacity:0; transition:opacity .25s ease }
+.btn:hover::after{ opacity:1 }
+.btn-primary{
+  background: linear-gradient(180deg, var(--accent), var(--accent-2)); color:#f8fafc; border-color: transparent;
+  transition: transform .15s ease, box-shadow .3s ease;
+}
+.btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.25) }
+.btn-ghost{ background:transparent; box-shadow:none }
+
+/* ====== Paneles / títulos ====== */
+.panel{
+  background: var(--panel-strong); border:1px solid var(--border); border-radius:14px; padding:12px;
+  box-shadow: var(--shadow); backdrop-filter: blur(8px) saturate(180%); transition: box-shadow .3s ease, transform .25s ease;
+  height: fit-content;
+}
+.panel:hover{ box-shadow: 0 12px 32px rgba(0,0,0,.28); transform: translateY(-2px) }
+
+.title{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:18px; margin-bottom:8px }
+.pill{ font-size:11px; padding:4px 8px; border-radius:999px; background:rgba(59,130,246,.15); border:1px solid rgba(59,130,246,.35); color:#274690 }
+
+/* ====== Toolbar y formularios ====== */
+.toolbar{ display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; margin-bottom:10px; justify-content: space-between;}
+.toolbar .left{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+
+.field{ display:flex; flex-direction:column; gap:6px }
+.field label{ font-size:12px; color:var(--muted) }
+
+.select, .input{
+  appearance:none; background: var(--panel-strong); color:var(--ink);
+  border:1px solid var(--border); border-radius:10px; padding:8px 10px; font-size:13px;
+}
+
+:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px }
+
+/* ====== Listas / tablas ====== */
+.list{ border:1px solid var(--border); border-radius:12px; overflow:hidden; background:rgb(255 255 255 / 60%) }
+.list table{ width:100%; border-collapse:collapse; font-size:13px }
+.list th, .list td{ padding:10px 12px; border-bottom:1px solid var(--border) }
+.list th{ text-align:left; color:var(--muted); background:rgba(0,0,0,.03); user-select:none; cursor:pointer; position:relative }
+.list tr{ transition: background-color .15s ease }
+.list tr:hover{ background-color: rgba(59,130,246,.08) }
+
+.th-sort-asc::after, .th-sort-desc::after{
+  content:""; position:absolute; right:10px; top:50%; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent;
+}
+.th-sort-asc::after{ border-bottom:6px solid var(--muted); transform: translateY(-60%) }
+.th-sort-desc::after{ border-top:6px solid var(--muted); transform: translateY(-40%) }
+
+.badge{ padding:4px 8px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.2px }
+.badge.ok{ background:rgba(22,163,74,.18); color:#166534; border:1px solid rgba(22,163,74,.35) }
+.badge.bad{ background:rgba(220,38,38,.18); color:#b91c1c; border:1px solid rgba(220,38,38,.35) }
+
+/* ====== Paginación ====== */
+.pager{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; padding-top:10px }
+.pages{ display:flex; gap:6px; align-items:center }
+.page-btn{ min-width:34px; text-align:center; border:1px solid var(--border); background:var(--panel-strong); color:var(--ink); border-radius:8px; padding:6px 10px; cursor:pointer; font-size:13px; }
+.page-btn[aria-current="true"]{ background:linear-gradient(180deg, var(--accent), var(--accent-2)); color:#f8fafc; border-color:transparent }
+
+/* ====== Footer (base) ====== */
+footer{ margin:16px 0 6px; text-align:center; font-size:12px; color:var(--muted) }
+/* La variante de footer con borde dorado es específica de Login -> EstilosLogin.css */
+
+/* ====== Modales ====== */
+.modal{
+  position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:18px;
+  background: rgba(2,6,23,.55); backdrop-filter: blur(6px);
+  z-index:100;
+}
+.modal[aria-hidden="false"]{ display:flex }
+
+.sheet{
+  width:100%; max-width:980px; background:var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow: var(--shadow);
+  animation: pop .2s ease-out;
+}
+@keyframes pop{ from{ transform: translateY(6px); opacity:.0 } to{ transform: translateY(0); opacity:1 } }
+
+.sheet header{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px;
+  position:sticky; top:0; background: var(--panel-strong); border-radius: 8px;
+}
+.sheet h3{ margin:0; font-size:16px }
+.sheet .content{ padding:14px 16px }
+.sheet .actions{
+  display:flex; justify-content:space-between; align-items:center; gap:10px; padding:14px 16px; border-top:1px solid var(--border);
+  border-bottom-left-radius:16px; border-bottom-right-radius:16px;
+}
+.form-grid{ display:grid; grid-template-columns:1fr; gap:12px }
+@media(min-width:720px){ .form-grid{ grid-template-columns:1fr 1fr } }
+
+/* ====== Juez IA (gauge) ====== */
+.ai-grid{ display:grid; grid-template-columns:1fr; gap:16px }
+@media(min-width:900px){ .ai-grid{ grid-template-columns:320px 1fr } }
+.gauge-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; justify-content: center;}
+.gauge{
+  --p:.72; --gcolor: var(--accent);
+  width: 240px; height: 240px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(59,130,246,.16), transparent 60%) padding-box,
+    conic-gradient(var(--gcolor) calc(var(--p)*1turn), rgba(148,163,184,.25) 0) border-box;
+  border: 10px solid transparent; position: relative; box-shadow: inset 0 0 40px rgba(14,165,233,.18);
+}
+.gauge::after{
+  content:""; position:absolute; inset:16px; border-radius:50%;
+  background: linear-gradient(180deg, var(--panel-strong), rgba(0,0,0,.06));
+  border:1px solid var(--border); box-shadow: inset 0 8px 30px rgba(0,0,0,.06);
+}
+.gauge-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; pointer-events:none }
+.gauge-value{ font-size:34px; font-weight:700 }
+.gauge-sub{ font-size:12px; color:var(--muted) }
+.decision{ font-size:13px; padding:8px 10px; border-radius:10px; font-weight:700; letter-spacing:.3px; border:1px solid var(--border); background:var(--panel-strong); text-transform:uppercase }
+.decision.ok{ background: rgba(22,163,74,.2); border-color: rgba(22,163,74,.35) }
+.decision.bad{ background: rgba(220,38,38,.2); border-color: rgba(220,38,38,.35) }
+
+.card{ border:1px solid var(--border); border-radius:12px; padding:12px; background:var(--panel-strong) }
+.card h4{ margin:0 0 8px 0; font-size:13px; color:var(--muted); font-weight:600 }
+.legend-dot{ width:10px; height:10px; border-radius:999px; display:inline-block; margin-right:6px; vertical-align:middle }
+.dot-ok{ background: var(--ok) } .dot-bad{ background: var(--bad) }
+.note{ font-size:11px; color:var(--muted) }
+
+/* ====== Utilidades varias ====== */
+.hidden{ display:none !important; }
+.nowrap{ white-space:nowrap; }
+
+/* ====== UTILIDAD: filtro invert (conserva personalización) ====== */
+.invert { filter: invert(1) hue-rotate(180deg); }
+.invert-0 { filter: invert(0); }
+.invert-50 { filter: invert(.5) hue-rotate(90deg); }
+
+/* ========================================================================
+   FORMATO CLIENTE: ASTURIA FORMATO.pdf
+   Tipografía y estilos de documento (namespacing .doc-*)
+   ======================================================================== */
+
+/* Contenedor de documento para no romper Dashboard/Login */
+.doc{
+  color: var(--ink);
+  font: 400 14px/1.6 var(--font-body);
+}
+
+/* Cabeceras institucionales (encabezado de página) */
+.doc .cabecera{
+  display:flex; flex-direction:column; gap:4px; margin-bottom:12px;
+  color: var(--muted); font-size:12px;
+}
+.doc .cabecera .entidad{ font-weight:600; color: var(--ink); }
+
+/* Titulación principal */
+.doc .titulo-xxl{
+  font-family: var(--font-heading);
+  font-weight:700;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing:-.01em;
+  margin: 0 0 8px 0;
+}
+.doc .titulo-l{
+  font-family: var(--font-heading);
+  font-weight:700;
+  font-size: clamp(22px, 3.2vw, 32px);
+  margin: 14px 0 6px 0;
+}
+.doc .titulo-m{
+  font-family: var(--font-heading);
+  font-weight:600;
+  font-size: clamp(18px, 2.4vw, 24px);
+  margin: 12px 0 6px 0;
+}
+
+/* Subtítulos */
+.doc .subtitulo-l{
+  font-family: var(--font-heading);
+  font-weight:600;
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--muted);
+  margin: 10px 0 4px 0;
+}
+.doc .subtitulo-m{
+  font-family: var(--font-heading);
+  font-weight:500;
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: var(--muted);
+  margin: 8px 0 4px 0;
+}
+
+/* Código de proyecto */
+.doc .codigo-proyecto{
+  font-family: var(--font-heading);
+  font-weight:600;
+  font-size: 12px;
+  letter-spacing:.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* Cuerpo de texto */
+.doc p, .doc .cuerpo{
+  font: 400 14px/1.7 var(--font-body);
+  margin: 0 0 10px 0;
+  color: var(--ink);
+}
+.doc strong{ font-weight:700 }
+.doc em{ font-style:italic }
+.doc em strong, .doc strong em{ font-weight:700; font-style:italic }
+
+/* Enlaces / Hipervínculos */
+.doc a{
+  color: var(--accent);
+  text-underline-offset: 2px;
+  text-decoration: underline;
+}
+.doc a:hover{ color: var(--accent-2) }
+
+/* Destacados (énfasis) */
+.doc .destacado{ background: rgba(39,70,144,.08); border-left:4px solid var(--accent); padding:8px 10px; border-radius:6px; }
+.doc .enfasis-1{ background: rgba(245,158,11,.12); border-left:4px solid var(--warn); padding:8px 10px; border-radius:6px; }
+.doc .enfasis-2{ background: rgba(14,165,233,.12); border-left:4px solid var(--chip); padding:8px 10px; border-radius:6px; }
+
+/* Cita */
+.doc .cita, .doc blockquote{
+  margin: 10px 0; padding:10px 12px;
+  border-left:4px solid var(--accent);
+  background: rgba(0,0,0,.03);
+  font-style: italic; color: var(--ink);
+  quotes: "“" "”" "‘" "’";
+}
+.doc .cita::before, .doc blockquote::before{ content: open-quote; margin-right:4px; color: var(--muted) }
+.doc .cita::after,  .doc blockquote::after { content: close-quote; margin-left:2px; color: var(--muted) }
+
+/* Pie de foto */
+.doc .pie-foto{
+  font-size:12px; color:var(--muted); margin-top:4px; text-align:left;
+}
+
+/* Nota a pie de página */
+.doc .nota-pie{
+  font-size:12px; color:var(--muted); font-style:italic;
+}
+.doc .nota-pie .marca{ font-weight:700; margin-right:4px }
+
+/* Bibliografía */
+.doc .bibliografia{
+  font-size:13px; color:var(--ink);
+  padding-left: 16px;
+}
+.doc .bibliografia li{ margin: 4px 0; }
+
+/* Listas */
+.doc ul{ padding-left: 20px; margin: 8px 0 }
+.doc ul li{ list-style: disc; margin: 4px 0 }
+.doc ol{ padding-left: 20px; margin: 8px 0 }
+.doc ol li{ margin: 4px 0 }
+.doc .ol-alpha{ list-style: lower-alpha }
+.doc .ol-roman{ list-style: lower-roman }
+
+/* Títulos AZUL (jerarquía de color) */
+.doc .t1-azul{
+  font-family: var(--font-heading); font-weight:700;
+  color: var(--accent); font-size: clamp(20px, 2.6vw, 28px); margin: 12px 0 6px 0;
+}
+.doc .t2-azul{
+  font-family: var(--font-heading); font-weight:600;
+  color: var(--accent); font-size: clamp(17px, 2.2vw, 22px); margin: 10px 0 4px 0;
+}
+.doc .t3-azul{
+  font-family: var(--font-heading); font-weight:600;
+  color: var(--accent); font-size: clamp(15px, 2vw, 18px); margin: 8px 0 4px 0;
+}
+.doc .t4-azul{
+  font-family: var(--font-heading); font-weight:600;
+  color: var(--accent); font-size: 14px; margin: 6px 0 4px 0;
+}
+
+/* Notas destacadas (Atención roja / Información azul) */
+.doc .nota{
+  padding:10px 12px; border-radius:8px; border:1px solid var(--border); background: var(--panel-strong);
+}
+.doc .nota.atencion{
+  border-left: 4px solid var(--bad);
+  background: rgba(220,38,38,.08);
+  color: #7f1d1d;
+}
+.doc .nota.informacion{
+  border-left: 4px solid var(--accent);
+  background: rgba(39,70,144,.08);
+  color: #1b3167;
+}
+
+/* Resaltado inline */
+.doc .mark{ background: linear-gradient(transparent 60%, rgba(245,158,11,.35) 0); }
+
+/* Encabezados numerados automáticos (1., 2.1, 3.1.1) */
+.doc.num{ counter-reset: h1; }
+.doc.num .n1{
+  counter-increment: h1; counter-reset: h2;
+  font-family: var(--font-heading); font-weight:700; font-size: clamp(18px, 2.4vw, 24px); margin: 12px 0 6px 0;
+}
+.doc.num .n1::before{ content: counter(h1) ". "; color: var(--accent); font-weight:700; }
+.doc.num .n2{
+  counter-increment: h2; counter-reset: h3;
+  font-family: var(--font-heading); font-weight:600; font-size: clamp(16px, 2.2vw, 20px); margin: 8px 0 4px 0;
+}
+.doc.num .n2::before{ content: counter(h1) "." counter(h2) " "; color: var(--accent); font-weight:700; }
+.doc.num .n3{
+  counter-increment: h3;
+  font-family: var(--font-heading); font-weight:600; font-size: 14px; margin: 6px 0 4px 0;
+}
+.doc.num .n3::before{ content: counter(h1) "." counter(h2) "." counter(h3) " "; color: var(--accent); font-weight:700; }
+
+/* Listas numeradas combinadas (1) a) i) ...) */
+.doc .lista{ padding-left: 20px; margin: 10px 0 }
+.doc .lista.decimal{ list-style: decimal; }
+.doc .lista.alpha{ list-style: lower-alpha; }
+.doc .lista.roman{ list-style: lower-roman; }
+
+/* Separadores de página/archivo/fecha (metadatos) */
+.doc .meta{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:var(--muted); font-size:12px;
+}
+.doc .meta .sep{ opacity:.6 }
+
+/* Tablas de documento (consistentes con list) */
+.doc .tabla{
+  width:100%; border-collapse: collapse; font-size:13px; margin: 10px 0; background: var(--panel-strong);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+}
+.doc .tabla th, .doc .tabla td{ padding:10px 12px; border-bottom:1px solid var(--border); text-align:left; }
+.doc .tabla th{ background: rgba(0,0,0,.03); color: var(--muted); }
+
+/* Separador visual */
+.doc .hr{ height:1px; background: var(--border); border:0; margin: 12px 0 }
+
+.bg-login { --bg-image: url('../img/Fondo2.png'); }
+
+/* Contenedor de página de login */
+.login-page{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  padding: 1rem;
+}
+
+/* Overlay con “niebla” */
+.bg-overlay.mist{
+  position: fixed; inset: 0;
+  backdrop-filter: blur(6px) saturate(100%);
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,.07), transparent 70%);
+  animation: mist 60s infinite alternate ease-in-out;
+  z-index: 0;
+}
+@keyframes mist{
+  from { background-position: 0 0; }
+  to   { background-position: 100% 100%; }
+}
+
+/* Card a dos columnas (form + imagen) */
+.auth-card{
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  width: min(90vw, 980px);
+  min-height: 460px;
+
+  border-radius: 12px;
+  overflow: hidden;                /* recorta y elimina halos */
+  background: transparent;         /* sin lechoso global */
+  border: 0;                       /* sin borde blanco */
+  box-shadow: 0 10px 40px rgba(0,0,0,.35); /* sin glow interno */
+  animation: fadeIn 0.6s ease-in-out;
+  transition: transform .4s ease;
+}
+.auth-card:hover { transform: scale(1.02); }
+
+@keyframes fadeIn { from{opacity:0; transform: translateY(6px);} to{opacity:1; transform:none;} }
+
+/* Columna izquierda (contenido) */
+.login-panel{
+    padding: 2rem 2rem 1.5rem;
+  text-align: center;
+  display:flex; flex-direction:column; justify-content:center;
+
+  background: rgb(255 255 255 / 0.62);     /* efecto cristal solo aquí */
+  backdrop-filter: blur(15px) saturate(180%);
+}
+.login-panel .img{
+  width: 26vh;
+  margin: 0 auto 1rem;
+  filter: drop-shadow(0 0 10px rgba(39,70,144,.4));
+}
+.login-panel h1{ margin:0; font-weight:700; }
+#LoginH1{ color:black !important; text-shadow: 0 0 black; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+#LoginH2{
+  color: rgba(0,0,0,0.44) !important;
+  font-size: 1em; padding:0; margin-bottom:1rem;
+}
+
+/* Inputs con íconos */
+.input-icon { position: relative; width: 100%; }
+.input-icon input{
+  width: 100%;
+  padding: 0.7rem 0.7rem 0.7rem 2.3rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+.input-icon input:focus{
+  border-color: #274690;
+  box-shadow: 0 0 6px rgba(39,70,144,0.3);
+  outline: none;
+}
+.input-icon i{
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #274690;
+  opacity: 0.7;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* Botón */
+.login-panel button{
+  width:100%; padding:.8rem; border:none; border-radius:6px;
+  color:#fff; font-weight:600; cursor:pointer;
+  background: linear-gradient(90deg, #274690, #1b3167, #274690);
+  background-size: 200% 100%;
+  animation: gradientShift 6s ease infinite;
+  transition: transform .2s ease, background-color .3s ease;
+}
+.login-panel button:hover{ transform: scale(1.03); }
+.login-panel button:active{ transform: scale(0.98); }
+.login-panel a{
+  display:block; margin-top:.8rem; font-size:.85rem;
+  color:#274690; text-decoration:none;
+}
+.login-panel a:hover{ text-decoration: underline; }
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Columna derecha (imagen a cobertura total) */
+.login-hero{
+  position: relative;
+  /* sin radios aquí; el recorte lo hace el padre (.auth-card + overflow:hidden) */
+  overflow: hidden;
+  background-image: url('../img/Paisaje_PDA.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: grid;             /* centrar el texto */
+  place-items: center;
+  min-height: 100%;
+}
+
+/* Oscurecer para legibilidad del texto */
+.login-hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(0,0,0,.32), rgba(0,0,0,.18));
+  pointer-events:none;
+}
+
+/* Estilo del texto centrado sobre la imagen */
+.hero-title{
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  text-shadow: 0 6px 22px rgba(0,0,0,.55);
+
+  /* pill glass centrado */
+  padding: .6rem 1.25rem;
+  /* border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(0,0,0,.38), rgba(0,0,0,.26));
+  backdrop-filter: blur(6px) saturate(140%); */
+  /* box-shadow: 0 8px 28px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.12); */
+}
+
+/* subrayado dorado acorde con la marca */
+.hero-title::after{
+  content:'';
+  display:block;
+  width: 56%;
+  height: 2px;
+  margin: .45rem auto 0;
+  background: linear-gradient(90deg, #d6b45a, #f2dea6, #d6b45a);
+  border-radius: 2px;
+  opacity: .95;
+}
+
+/* Overlay de carga */
+#loadingOverlay{
+  position: fixed; inset:0;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  display:flex; align-items:center; justify-content:center;
+  z-index: 10; opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+#loadingOverlay.active{ opacity:1; visibility:visible; }
+
+.spinner{
+  border: 4px solid rgba(39, 70, 144, 0.2);
+  border-top: 4px solid #274690;
+  border-radius: 50%;
+  width: 48px; height: 48px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin{
+  0%{ transform: rotate(0deg) }
+  100%{ transform: rotate(360deg) }
+}
+
+/* Footer */
+footer{
+  margin-top: 24px;
+  border-top: 2px solid #d6b45a;
+  color: rgba(255,255,255,.75);
+  padding-top: 8px;
+  width: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsivo: en pantallas pequeñas ocultamos la imagen y dejamos 1 columna */
+@media (max-width: 900px){
+  .auth-card{
+    grid-template-columns: 1fr;
+    width: min(95vw, 520px);
+    min-height: unset;
+  }
+  .login-panel{ border-right: none; }
+  .login-hero{ display: none; }
+}
+  </style>
+</head>
+
+<body class="bg-photo" style="--bg-image: url('../img/Fondo2.png')">
+  <div class="bg-overlay mist" aria-hidden="true"></div>
+
+  <div class="login-page">
+    <!-- Card a dos columnas -->
+    <div class="auth-card">
+      <!-- Columna izquierda: formulario -->
+      <section class="login-panel">
+        <img src="../img/PDAloginclean.png" alt="Logo PDA" />
+        <!-- <h1 id="LoginH1">Astur.IA</h1> -->
+        <p id="LoginH2">Acceso al sistema de análisis jurisprudencial · IA Judicial</p>
+
+        <div class="input-icon">
+          <i class="fa-solid fa-user"></i>
+          <input id="userInput" type="text" placeholder="Usuario" autocomplete="username" />
+        </div>
+
+        <div class="input-icon">
+          <i class="fa-solid fa-lock"></i>
+          <input id="passInput" type="password" placeholder="Contraseña" autocomplete="current-password" />
+        </div>
+
+        <button id="loginBtn">Iniciar sesión</button>
+        <a href="#">Olvidé mi contraseña</a>
+      </section>
+
+      <!-- Columna derecha: imagen completa -->
+      <aside class="login-hero">
+        <div class="hero-title">Astur.IA</div>
+      </aside>
+    </div>
+
+    <footer>© 2025 Gobierno del Principado de Asturias</footer>
+  </div>
+
+  <!-- Overlay de carga -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    document.getElementById("loginBtn").addEventListener("click", function(e) {
+      e.preventDefault();
+      const overlay = document.getElementById("loadingOverlay");
+      const u = (document.getElementById("userInput")?.value || '').trim();
+      const p = document.getElementById("passInput")?.value || '';
+      overlay.classList.add("active");
+
+      setTimeout(() => {
+        if (u === "Admin" && p === "Admin") {
+          window.location.href = "GestionUsuarios.html";
+        } else {
+          window.location.href = "Listado.html";
+        }
+      }, 800);
+    });
+  </script>
+</body>
+</html>

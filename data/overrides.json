@@ -1,0 +1,44 @@
+{
+  "RPL_0000301_2025": {
+    "estado": "ok",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 11:12:10",
+    "numero_expediente": "EXP-2025-0003"
+  },
+  "RPL_0000442_2025": {
+    "estado": "ok",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 11:12:23",
+    "numero_expediente": "EXP-2025-0007"
+  },
+  "RPL_0000168_2025": {
+    "estado": "ok",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 11:13:05",
+    "numero_expediente": "EXP-2025-0001"
+  },
+  "RPL_0000311_2025": {
+    "estado": "error",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 13:41:22",
+    "numero_expediente": "EXP-2025-0004"
+  },
+  "RPL_0000279_2025": {
+    "estado": "fp",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 13:41:35",
+    "numero_expediente": "EXP-2025-0002"
+  },
+  "RPL_0000427_2025": {
+    "estado": "fp",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "17/12/2025, 13:41:43",
+    "numero_expediente": "EXP-2025-0006"
+  },
+  "RPL_0000373_2025": {
+    "estado": "fp",
+    "fecha_incorporacion": "2025-12-15",
+    "ultima_vez_procesado": "16/1/2026, 17:33:05",
+    "numero_expediente": "EXP-2025-0001"
+  }
+}
